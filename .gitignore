@@ -1,0 +1,77 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SECRETS & CREDENTIALS — never commit. This block is the #1 priority.
+# ─────────────────────────────────────────────────────────────────────────────
+secrets/
+**/secrets/
+*.env
+.env
+.env.*
+*.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*credential*
+*credentials*
+credentials.json
+client_secret*.json
+*service-account*.json
+*service_account*.json
+token.json
+*.token
+*_token
+oauth*.json
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DATA / STATE — databases, lead data (PII), ledgers, backups
+# ─────────────────────────────────────────────────────────────────────────────
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+state/
+**/state/
+backups/
+**/backups/
+*.bak
+*.bak-*
+*.before
+seen_replies.txt
+seen_uploaded*
+suppression.txt
+*.callonly.csv
+leads*.csv
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LOGS
+# ─────────────────────────────────────────────────────────────────────────────
+*.log
+runtime-logs/
+**/runtime-logs/
+logs/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PYTHON / NODE / OS junk
+# ─────────────────────────────────────────────────────────────────────────────
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+node_modules/
+**/node_modules/
+package-lock.json
+.DS_Store
+**/.DS_Store
+Thumbs.db
+*.swp

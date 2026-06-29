@@ -1,0 +1,136 @@
+{
+  "schema_version": "outreach.reply-playbooks.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "external_send_allowed": false,
+    "automatic_subsequence_allowed": false,
+    "automatic_scheduling_allowed": false,
+    "crm_mutation_allowed": false,
+    "human_review_required": true
+  },
+  "assignment": {
+    "unit": "lead_id",
+    "method": "sha256_mod_100",
+    "cross_reply_stickiness": true
+  },
+  "experiments": [
+    {
+      "experiment_id": "positive-interest-response-v1",
+      "intent": "positive_interest",
+      "variants": [
+        {
+          "variant_id": "confirm-and-narrow-a",
+          "weight": 50,
+          "draft": "Thanks for the reply. A focused next step is a review using appropriately redacted information. I can prepare the draft checklist for you to review."
+        },
+        {
+          "variant_id": "question-first-b",
+          "weight": 50,
+          "draft": "Thanks for the reply. Which area is most relevant to review first: pricing structure, support, or payment operations? I can prepare the matching draft checklist."
+        }
+      ]
+    },
+    {
+      "experiment_id": "booking-response-v1",
+      "intent": "booking",
+      "variants": [
+        {
+          "variant_id": "context-first-a",
+          "weight": 50,
+          "draft": "Thanks. Before scheduling, I can prepare a concise review context and the redaction checklist so the conversation stays focused."
+        },
+        {
+          "variant_id": "scope-first-b",
+          "weight": 50,
+          "draft": "Thanks. I can prepare a short agenda around the specific payment question you want to cover, together with the draft redaction checklist."
+        }
+      ]
+    },
+    {
+      "experiment_id": "question-response-v1",
+      "intent": "question",
+      "variants": [
+        {
+          "variant_id": "direct-answer-a",
+          "weight": 50,
+          "draft": "Thanks for the question. I will prepare a direct, evidence-bounded answer and a draft FAQ section for review."
+        },
+        {
+          "variant_id": "clarify-then-answer-b",
+          "weight": 50,
+          "draft": "Thanks for the question. I will identify the narrowest interpretation, note any evidence limits, and prepare a draft answer for review."
+        }
+      ]
+    },
+    {
+      "experiment_id": "objection-response-v1",
+      "intent": "objection",
+      "variants": [
+        {
+          "variant_id": "acknowledge-and-compare-a",
+          "weight": 50,
+          "draft": "Understood. I will prepare a neutral comparison question set so you can decide whether any further review is worthwhile."
+        },
+        {
+          "variant_id": "acknowledge-and-hold-b",
+          "weight": 50,
+          "draft": "Understood. I will hold further follow-up and prepare the neutral comparison questions only for your review."
+        }
+      ]
+    }
+  ],
+  "playbooks": {
+    "booking": {
+      "experiment_id": "booking-response-v1",
+      "resource_id": "statement-review-prep",
+      "steps": [
+        "prepare_booking_context",
+        "preview_resource",
+        "request_human_review"
+      ]
+    },
+    "positive_interest": {
+      "experiment_id": "positive-interest-response-v1",
+      "resource_id": "statement-review-prep",
+      "steps": [
+        "prepare_response_draft",
+        "preview_resource",
+        "request_human_review"
+      ]
+    },
+    "question": {
+      "experiment_id": "question-response-v1",
+      "resource_id": "payment-operations-faq",
+      "steps": [
+        "prepare_evidence_bounded_answer",
+        "preview_resource",
+        "request_human_review"
+      ]
+    },
+    "objection": {
+      "experiment_id": "objection-response-v1",
+      "resource_id": "processor-comparison-questions",
+      "steps": [
+        "prepare_objection_response",
+        "preview_resource",
+        "request_human_review"
+      ]
+    },
+    "out_of_office": {
+      "resource_id": "none",
+      "steps": ["review_return_date", "hold_until_human_decision"]
+    },
+    "not_interested": {
+      "resource_id": "none",
+      "steps": ["propose_suppression", "request_suppression_review"]
+    },
+    "unsubscribe": {
+      "resource_id": "none",
+      "steps": ["propose_suppression", "request_suppression_review"]
+    },
+    "ambiguous": {
+      "resource_id": "none",
+      "steps": ["manual_intent_review"]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "_note": "Placeholder template registry. Replace with your own sequences.",
+  "templates": {
+    "example_sequence": {
+      "subject": "{{first_name}}, a quick question about {{company}}",
+      "body": "Hi {{first_name}},\n\n<one or two lines on the value you offer {{company}}>\n\n<single clear call to action>\n\n- {{sender_name}}",
+      "cta": "{{call_to_action}}"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "_note": "Placeholder campaign styles. Define your own tones/variants.",
+  "styles": {
+    "default": {
+      "tone": "direct, friendly, concise",
+      "max_words": 90,
+      "variables": ["first_name", "company", "value_prop", "call_to_action", "sender_name"]
+    }
+  }
+}

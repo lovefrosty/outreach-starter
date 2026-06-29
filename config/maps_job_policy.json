@@ -1,0 +1,42 @@
+{
+  "schema_version": "outreach.maps-job-policy.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "external_api_calls_allowed": false,
+    "database_writes_allowed": false,
+    "automatic_fallback_calls_allowed": false,
+    "automatic_retry_calls_allowed": false,
+    "cost_commitment_allowed": false
+  },
+  "providers": [
+    {
+      "provider_id": "apify_maps",
+      "role": "primary",
+      "max_attempts": 2,
+      "attempt_timeout_seconds": 120,
+      "retryable_error_codes": ["timeout", "rate_limited", "transient_provider"],
+      "backoff_seconds": [0, 30]
+    },
+    {
+      "provider_id": "places_direct",
+      "role": "fallback",
+      "max_attempts": 2,
+      "attempt_timeout_seconds": 45,
+      "retryable_error_codes": ["timeout", "rate_limited", "transient_provider"],
+      "backoff_seconds": [0, 15]
+    }
+  ],
+  "terminal_error_codes": [
+    "authentication_failed",
+    "invalid_query",
+    "policy_blocked",
+    "budget_exceeded"
+  ],
+  "provenance": {
+    "stable_external_id_required": true,
+    "source_url_required": true,
+    "capture_timestamp_required": true,
+    "artifact_sha256_required": true,
+    "field_evidence_required": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "outreach.instantly-replacement-requirements.v1",
+  "status": "offline_shadow",
+  "layers": [
+    {"id":"domain_rotation","evidence_files":["workspace/pipeline/delivery_planner.py","workspace/pipeline/quota_reservations.py"],"eval_ids":["delivery-planner","quota-reservations"]},
+    {"id":"esp_esg_segmentation","evidence_files":["workspace/config/recipient_esp_rules.json","workspace/pipeline/delivery_planner.py"],"eval_ids":["delivery-planner"]},
+    {"id":"ooo_adjusted_reply_rate","evidence_files":["workspace/pipeline/reply_intelligence.py","workspace/pipeline/outbound_event_ledger.py"],"eval_ids":["reply-intelligence","outbound-event-ledger"]},
+    {"id":"per_email_per_lead_conversion","evidence_files":["workspace/pipeline/outbound_event_ledger.py"],"eval_ids":["outbound-event-ledger"]},
+    {"id":"google_maps_engine","evidence_files":["workspace/pipeline/maps_job_controller.py"],"eval_ids":["maps-job-controller"]},
+    {"id":"custom_directory_sources","evidence_files":["workspace/config/directory_sources.json","workspace/pipeline/directory_snapshot_compiler.py"],"eval_ids":["directory-snapshot-compiler"]},
+    {"id":"enrichment_touchpoints","evidence_files":["workspace/pipeline/nodes/c2_scraper.py","workspace/pipeline/campaign_research_contract.py"],"eval_ids":["c2-scraper","campaign-research-contract"]},
+    {"id":"speed_to_lead","evidence_files":["workspace/pipeline/webhook_gateway.py","workspace/pipeline/reply_workflow.py"],"eval_ids":["webhook-gateway","reply-workflow"]},
+    {"id":"intent_categorization","evidence_files":["workspace/pipeline/reply_intelligence.py"],"eval_ids":["reply-intelligence"]},
+    {"id":"split_tested_reply_templates","evidence_files":["workspace/pipeline/reply_workflow.py"],"eval_ids":["reply-workflow"]},
+    {"id":"positive_reply_subsequences","evidence_files":["workspace/pipeline/sequence_state.py","workspace/pipeline/reply_workflow.py"],"eval_ids":["sequence-state","reply-workflow"]},
+    {"id":"custom_followup_resources","evidence_files":["workspace/config/custom_resource_registry.json","workspace/pipeline/reply_workflow.py"],"eval_ids":["reply-workflow"]}
+  ],
+  "production_gates": [
+    {"id":"telegram_mutation_surface_hardened","satisfied":false,"evidence_path":null},
+    {"id":"live_webhook_listener_and_secret_manager_verified","satisfied":false,"evidence_path":null},
+    {"id":"live_suppression_ingestion_and_gate_verified","satisfied":false,"evidence_path":null},
+    {"id":"live_dns_sender_health_and_usage_reconciliation_verified","satisfied":false,"evidence_path":null},
+    {"id":"provider_sender_adapter_verified","satisfied":false,"evidence_path":null},
+    {"id":"production_sequence_writer_and_executor_verified","satisfied":false,"evidence_path":null},
+    {"id":"shadow_event_and_deliverability_parity_passed","satisfied":false,"evidence_path":null},
+    {"id":"bounded_canary_approved_and_passed","satisfied":false,"evidence_path":null},
+    {"id":"rollback_drill_passed","satisfied":false,"evidence_path":null}
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "outreach.directory-sources.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "external_fetch_allowed": false,
+    "database_writes_allowed": false,
+    "automatic_lead_promotion_allowed": false,
+    "login_or_access_control_bypass_allowed": false
+  },
+  "prohibited_input_fields": [
+    "pain_theme",
+    "private_pain",
+    "processing_volume",
+    "propensity",
+    "internal_notes"
+  ],
+  "sources": [
+    {
+      "source_id": "nj_construction_permits",
+      "source_url": "https://data.nj.gov/Reference-Data/NJ-Construction-Permit-Data/w9se-dmra",
+      "acquisition_mode": "downloaded_public_dataset",
+      "format": "json_rows",
+      "stable_id_field": "permit_id",
+      "field_mapping": {
+        "company": "contractor_name",
+        "website": "website",
+        "phone": "phone",
+        "address": "project_address",
+        "city_state": "municipality_state",
+        "filing_date": "permit_date",
+        "vertical": "vertical"
+      },
+      "required_fields": ["permit_id", "contractor_name", "project_address"],
+      "compliance": {
+        "robots_policy": "not_applicable_official_download",
+        "terms_review_status": "manual_review_required_before_live_fetch",
+        "rate_limit_per_minute": 10
+      }
+    },
+    {
+      "source_id": "gloucester_trade_names",
+      "source_url": "https://www.gloucestercountynj.gov/388/Trade-Names",
+      "acquisition_mode": "downloaded_public_dataset",
+      "format": "json_rows",
+      "stable_id_field": "registration_id",
+      "field_mapping": {
+        "company": "trade_name",
+        "website": "website",
+        "phone": "phone",
+        "address": "business_address",
+        "city_state": "city_state",
+        "filing_date": "registration_date",
+        "vertical": "vertical"
+      },
+      "required_fields": ["registration_id", "trade_name", "business_address"],
+      "compliance": {
+        "robots_policy": "not_applicable_official_download",
+        "terms_review_status": "manual_review_required_before_live_fetch",
+        "rate_limit_per_minute": 6
+      }
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "schema_version": "outreach.sender-registry.v1",
+  "status": "synthetic_shadow_fixture",
+  "safety": {
+    "external_send_allowed": false,
+    "provider_api_allowed": false,
+    "dns_lookup_allowed": false,
+    "credential_material_allowed": false,
+    "crm_mutation_allowed": false,
+    "usage_updates_are_simulated_only": true
+  },
+  "approved_campaign_routes": [
+    "restaurant_default",
+    "pharmacy_default",
+    "dealership_default"
+  ],
+  "service_groups": [
+    {
+      "service_group_id": "shadow-api-primary",
+      "provider_adapter": "not_implemented",
+      "health": "healthy",
+      "paused": false
+    },
+    {
+      "service_group_id": "shadow-api-held",
+      "provider_adapter": "not_implemented",
+      "health": "unhealthy",
+      "paused": true
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "domain-east",
+      "domain": "acme-east.test",
+      "dns_ready": true,
+      "health": "healthy",
+      "paused": false,
+      "daily_quota": 4,
+      "sent_today": 0,
+      "approved_campaign_routes": [
+        "restaurant_default",
+        "pharmacy_default",
+        "dealership_default"
+      ]
+    },
+    {
+      "domain_id": "domain-west",
+      "domain": "acme-west.test",
+      "dns_ready": true,
+      "health": "healthy",
+      "paused": false,
+      "daily_quota": 4,
+      "sent_today": 0,
+      "approved_campaign_routes": [
+        "restaurant_default",
+        "pharmacy_default",
+        "dealership_default"
+      ]
+    },
+    {
+      "domain_id": "domain-held",
+      "domain": "acme-held.test",
+      "dns_ready": false,
+      "health": "unhealthy",
+      "paused": true,
+      "daily_quota": 4,
+      "sent_today": 0,
+      "approved_campaign_routes": ["restaurant_default"]
+    }
+  ],
+  "identities": [
+    {
+      "sender_identity_id": "sender-east-1",
+      "address": "outreach-1@acme-east.test",
+      "domain_id": "domain-east",
+      "service_group_id": "shadow-api-primary",
+      "health": "healthy",
+      "paused": false,
+      "daily_quota": 2,
+      "sent_today": 0,
+      "approved_campaign_routes": [
+        "restaurant_default",
+        "pharmacy_default",
+        "dealership_default"
+      ],
+      "allowed_recipient_segments": [
+        "google_workspace",
+        "microsoft_365",
+        "proofpoint_gateway",
+        "mimecast_gateway",
+        "other"
+      ],
+      "segment_affinity": {
+        "google_workspace": 100,
+        "microsoft_365": 80,
+        "proofpoint_gateway": 70,
+        "mimecast_gateway": 70,
+        "other": 50
+      }
+    },
+    {
+      "sender_identity_id": "sender-east-2",
+      "address": "outreach-2@acme-east.test",
+      "domain_id": "domain-east",
+      "service_group_id": "shadow-api-primary",
+      "health": "healthy",
+      "paused": false,
+      "daily_quota": 2,
+      "sent_today": 0,
+      "approved_campaign_routes": [
+        "restaurant_default",
+        "pharmacy_default",
+        "dealership_default"
+      ],
+      "allowed_recipient_segments": [
+        "google_workspace",
+        "microsoft_365",
+        "proofpoint_gateway",
+        "mimecast_gateway",
+        "other"
+      ],
+      "segment_affinity": {
+        "google_workspace": 100,
+        "microsoft_365": 80,
+        "proofpoint_gateway": 70,
+        "mimecast_gateway": 70,
+        "other": 50
+      }
+    },
+    {
+      "sender_identity_id": "sender-west-1",
+      "address": "outreach-1@acme-west.test",
+      "domain_id": "domain-west",
+      "service_group_id": "shadow-api-primary",
+      "health": "healthy",
+      "paused": false,
+      "daily_quota": 3,
+      "sent_today": 0,
+      "approved_campaign_routes": [
+        "restaurant_default",
+        "pharmacy_default",
+        "dealership_default"
+      ],
+      "allowed_recipient_segments": [
+        "google_workspace",
+        "microsoft_365",
+        "proofpoint_gateway",
+        "mimecast_gateway",
+        "other"
+      ],
+      "segment_affinity": {
+        "google_workspace": 100,
+        "microsoft_365": 80,
+        "proofpoint_gateway": 70,
+        "mimecast_gateway": 70,
+        "other": 50
+      }
+    },
+    {
+      "sender_identity_id": "sender-held-1",
+      "address": "outreach@acme-held.test",
+      "domain_id": "domain-held",
+      "service_group_id": "shadow-api-held",
+      "health": "unhealthy",
+      "paused": true,
+      "daily_quota": 2,
+      "sent_today": 0,
+      "approved_campaign_routes": ["restaurant_default"],
+      "allowed_recipient_segments": ["google_workspace"],
+      "segment_affinity": {"google_workspace": 200}
+    }
+  ]
+}

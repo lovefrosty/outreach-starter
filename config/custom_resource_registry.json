@@ -1,0 +1,51 @@
+{
+  "schema_version": "outreach.custom-resource-registry.v1",
+  "status": "draft_only",
+  "safety": {
+    "external_distribution_allowed": false,
+    "automatic_attachment_allowed": false,
+    "automatic_publish_allowed": false,
+    "human_promotion_required": true
+  },
+  "resources": [
+    {
+      "resource_id": "statement-review-prep",
+      "version": "2026-06-13-draft-1",
+      "title": "Statement Review Preparation",
+      "path": "workspace/resources/statement-review-prep.md",
+      "sha256": "e44bb55d175ab811162009cdd115a00b323f36f0f6ea3dc3feeccf90d5e484c7",
+      "status": "pending_human_review",
+      "external_use_allowed": false,
+      "supported_intents": ["booking", "positive_interest"],
+      "audience": ["restaurant", "pharmacy", "car_dealership"],
+      "claims_policy": "process_and_redaction_guidance_only",
+      "expires_at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "resource_id": "payment-operations-faq",
+      "version": "2026-06-13-draft-1",
+      "title": "Payment Operations Review FAQ",
+      "path": "workspace/resources/payment-operations-faq.md",
+      "sha256": "64be029c879306a57b247a5780db441de28fcda4fbaacf45926bcb8887b3a594",
+      "status": "pending_human_review",
+      "external_use_allowed": false,
+      "supported_intents": ["question"],
+      "audience": ["restaurant", "pharmacy", "car_dealership"],
+      "claims_policy": "scope_and_process_faq_only",
+      "expires_at": "2026-09-13T00:00:00Z"
+    },
+    {
+      "resource_id": "processor-comparison-questions",
+      "version": "2026-06-13-draft-1",
+      "title": "Processor Comparison Questions",
+      "path": "workspace/resources/processor-comparison-questions.md",
+      "sha256": "31f0917527c3026364cd6578f43a8a9a50fc207a4c620663a728dfda25e47ed6",
+      "status": "pending_human_review",
+      "external_use_allowed": false,
+      "supported_intents": ["objection"],
+      "audience": ["restaurant", "pharmacy", "car_dealership"],
+      "claims_policy": "neutral_questions_only",
+      "expires_at": "2026-09-13T00:00:00Z"
+    }
+  ]
+}

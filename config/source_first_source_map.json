@@ -1,0 +1,214 @@
+{
+  "schema_version": "outreach.source-first-map.v1",
+  "status": "no_send_implementation_plan",
+  "safety": {
+    "external_fetch_allowed": false,
+    "database_writes_allowed": false,
+    "automatic_lead_promotion_allowed": false,
+    "paid_enrichment_allowed": false,
+    "sending_or_queue_approval_allowed": false,
+    "login_or_access_control_bypass_allowed": false
+  },
+  "principles": [
+    "Source adapters run before C2 and return normalized seed rows only.",
+    "C2 remains the official website scraper and evidence layer.",
+    "No-website leads stay in seeded_research_needed or research_needed lanes.",
+    "Promotion toward pulled requires durable match evidence: website, Google Place ID, phone, address, official license ID, or official entity ID.",
+    "Public social/context links may improve scoring and routing but must not become unsupported personalization."
+  ],
+  "recommended_first_adapters": [
+    {
+      "rank": 1,
+      "vertical": "dealership",
+      "adapter": "dealership_directory",
+      "reason": "Current dealership website-first discovery has the weakest verified-email yield; OEM locators, group pages, platform footprints, and license rosters create better rooftop seeds before C2."
+    },
+    {
+      "rank": 2,
+      "vertical": "restaurant",
+      "adapter": "restaurant_directory",
+      "reason": "Places-style and reservation/delivery profiles create broad, high-volume restaurant seeds with POS, ordering, reservation, catering, social, and multi-location clues."
+    },
+    {
+      "rank": 3,
+      "vertical": "pharmacy",
+      "adapter": "pharmacy_directory",
+      "reason": "License and network directories give higher-confidence independent pharmacy seeds, active-status checks, and owner/pharmacist evidence before website scrape."
+    }
+  ],
+  "verticals": {
+    "dealership": {
+      "target_adapter": "dealership_directory",
+      "ranked_sources": [
+        {
+          "rank": 1,
+          "source_type": "oem_dealer_locator",
+          "why": "Official brand locators are high-trust rooftop discovery with brand, address, phone, website, and sometimes service links."
+        },
+        {
+          "rank": 2,
+          "source_type": "dealer_group_page",
+          "why": "Group pages reveal ownership structure, multi-rooftop operators, executive/contact pages, and decision-maker signals."
+        },
+        {
+          "rank": 3,
+          "source_type": "dealer_platform_footprints",
+          "examples": ["Dealer.com", "DealerOn", "Sincro", "Dealer Inspire"],
+          "why": "Platform footprints often expose website stack, service/scheduler/payment flows, and consistent rooftop metadata."
+        },
+        {
+          "rank": 4,
+          "source_type": "marketplace_listings",
+          "examples": ["Cars.com", "Autotrader", "CarGurus", "Edmunds"],
+          "why": "Aggregator listings are good coverage backstops with phone, address, brand, inventory, and profile URLs."
+        },
+        {
+          "rank": 5,
+          "source_type": "state_dealer_license",
+          "why": "License lists validate active status and legal entity/rooftop existence, especially for no-website seeds."
+        },
+        {
+          "rank": 6,
+          "source_type": "dealer_association",
+          "why": "Associations can surface owners, executives, and regional operators when official websites are thin."
+        }
+      ],
+      "output_fields": [
+        "rooftop name",
+        "brand",
+        "group ownership",
+        "city/state",
+        "address",
+        "website",
+        "phone",
+        "staff/contact pages",
+        "DMS/payment clues",
+        "service/payment workflow clues",
+        "decision-maker signals",
+        "source URL",
+        "external source ID"
+      ]
+    },
+    "restaurant": {
+      "target_adapter": "restaurant_directory",
+      "ranked_sources": [
+        {
+          "rank": 1,
+          "source_type": "google_places",
+          "why": "Broadest coverage for restaurant discovery with phone, address, website, ratings, reviews, and Place ID dedupe."
+        },
+        {
+          "rank": 2,
+          "source_type": "reservation_profiles",
+          "examples": ["OpenTable", "Resy"],
+          "why": "Reservation profiles signal higher operational complexity and guest-flow workflows."
+        },
+        {
+          "rank": 3,
+          "source_type": "ordering_delivery_profiles",
+          "examples": ["Toast", "ChowNow", "Slice", "DoorDash", "Uber Eats"],
+          "why": "Ordering/delivery profiles reveal online ordering, delivery, POS/payment, and guest-data fragmentation clues."
+        },
+        {
+          "rank": 4,
+          "source_type": "restaurant_association",
+          "why": "Associations can surface owner/operator names, member status, and regional independent operators."
+        },
+        {
+          "rank": 5,
+          "source_type": "tourism_or_chamber_directory",
+          "why": "Local official directories add coverage for independents and no-website operators."
+        },
+        {
+          "rank": 6,
+          "source_type": "best_of_local_list",
+          "why": "Aggregator/editorial lists are useful for local expansion but lower provenance than official or profile sources."
+        }
+      ],
+      "output_fields": [
+        "restaurant name",
+        "city/state",
+        "address",
+        "website",
+        "phone",
+        "POS/order/payment clues",
+        "reservation/delivery/catering signals",
+        "multi-location signals",
+        "social links",
+        "owner/operator evidence",
+        "source URL",
+        "external source ID"
+      ]
+    },
+    "pharmacy": {
+      "target_adapter": "pharmacy_directory",
+      "ranked_sources": [
+        {
+          "rank": 1,
+          "source_type": "state_pharmacy_board_or_license_roster",
+          "examples": ["NJ Division of Consumer Affairs", "Northeast pharmacy board rosters"],
+          "why": "Official license status and license IDs give the strongest seed provenance and prevent closed/expired pharmacies from entering active outreach."
+        },
+        {
+          "rank": 2,
+          "source_type": "ncpa_directory",
+          "why": "Independent pharmacy membership context improves owner/operator and pharmacy-type confidence."
+        },
+        {
+          "rank": 3,
+          "source_type": "good_neighbor_or_health_mart",
+          "why": "Network directories reveal independent/community pharmacy operators and often include profile pages."
+        },
+        {
+          "rank": 4,
+          "source_type": "cpesn",
+          "why": "CPESN participation can signal service-oriented pharmacy workflows and operational maturity."
+        },
+        {
+          "rank": 5,
+          "source_type": "pharmacy_association",
+          "why": "Association directories can expose owner/pharmacist evidence and active local operators."
+        },
+        {
+          "rank": 6,
+          "source_type": "local_directory",
+          "why": "Local directories are fallback coverage only; they need stronger matching before C2 promotion."
+        }
+      ],
+      "output_fields": [
+        "pharmacy name",
+        "license status",
+        "license ID",
+        "pharmacy type",
+        "city/state",
+        "address",
+        "website",
+        "phone",
+        "counter workflow clues",
+        "inventory/payment/patient-data signals",
+        "owner/pharmacist evidence",
+        "source URL",
+        "external source ID"
+      ]
+    }
+  },
+  "confidence_rules": {
+    "high": "Website or Google Place ID plus phone or address; suitable as a C2 candidate after resolver review.",
+    "medium": "Official license/entity ID plus phone or address, or phone plus address; keep as seed until website or profile match is resolved.",
+    "low": "Only one durable match field; keep in research_needed.",
+    "research_needed": "No durable match fields; preserve as a seed but do not promote."
+  },
+  "dedupe_keys": [
+    "vertical + source_type + external_id",
+    "vertical + normalized company + phone",
+    "vertical + normalized company + address",
+    "official license/entity ID where present",
+    "Google Place ID where present",
+    "website domain after resolver/C2 confirms it"
+  ],
+  "expected_impact": {
+    "email_supply": "Higher top-of-funnel seed volume because Outreach stops waiting for business websites to be the discovery source.",
+    "decision_maker_confidence": "Improves where group pages, association profiles, license rosters, and staff/contact pages expose owner, operator, pharmacist, GM, or executive signals.",
+    "enrichment_quality": "Raises verified conversion by giving C2 better website/profile targets and by preserving no-website leads for resolver work instead of discarding them."
+  }
+}

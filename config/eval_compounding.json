@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "history_limit": 30,
+  "state_path": "workspace/evals/compounding/state.json",
+  "digest_path": "workspace/evals/compounding/latest-digest.md",
+  "state_doc_path": "workspace/STATE.md",
+  "delivery": {
+    "target": "telegram",
+    "destination": "Outreach operator chat via TELEGRAM_CHAT_ID",
+    "mode": "bot_send_message"
+  },
+  "tests": [
+    {
+      "id": "control-plane",
+      "description": "Human approval, audit, and stage-transition controls",
+      "command": ["python3", "workspace/pipeline/test_control_plane.py"],
+      "owner_skill": "workspace/skills/eval-compounding.md"
+    },
+    {
+      "id": "value-evaluation",
+      "description": "Layered-agent value, critical recall, and promotion policy",
+      "command": ["python3", "workspace/pipeline/test_value_evaluation.py"],
+      "owner_skill": "workspace/skills/eval-compounding.md"
+    },
+    {
+      "id": "c2-scraper",
+      "description": "Scraper URL validation and normal-miss behavior",
+      "command": ["python3", "workspace/pipeline/nodes/test_c2_scraper.py"],
+      "owner_skill": "workspace/skills/scraper-improvement-loop.md"
+    },
+    {
+      "id": "evidence-card",
+      "description": "Evidence-card extraction and provenance behavior",
+      "command": ["python3", "workspace/pipeline/ds/test_evidence_card.py"],
+      "owner_skill": "workspace/skills/outreach-research-scout.md"
+    },
+    {
+      "id": "archive-stale-leads",
+      "description": "Deterministic stale-lead archive rules",
+      "command": ["python3", "workspace/scripts/test_archive_stale_leads.py"],
+      "owner_skill": "workspace/skills/daily-heartbeat-next-best-action.md"
+    },
+    {
+      "id": "outreach-context-output",
+      "description": "Outreach context contract and next-best-action output",
+      "command": ["python3", "workspace/scripts/test_outreach_context_output.py"],
+      "owner_skill": "workspace/skills/outreach-ai-consulting-research-scout.md"
+    },
+    {
+      "id": "nj-license-adapter",
+      "description": "New Jersey license adapter normalization",
+      "command": ["python3", "workspace/scripts/test_nj_license_adapter.py"],
+      "owner_skill": "workspace/skills/one-off-lead-research.md"
+    },
+    {
+      "id": "eval-compounding-runner",
+      "description": "Eval transition, state, distillation, and delivery recording",
+      "command": ["python3", "workspace/scripts/test_nightly_eval_compounding.py"],
+      "owner_skill": "workspace/skills/eval-compounding.md"
+    },
+    {
+      "id": "campaign-studio",
+      "description": "Campaign style compilation, provenance, and launch safety",
+      "command": ["python3", "workspace/pipeline/test_campaign_studio.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "campaign-research-contract",
+      "description": "Fail-closed source envelopes and legacy provenance readiness audits",
+      "command": ["python3", "workspace/pipeline/test_campaign_research_contract.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "campaign-learning",
+      "description": "Distinct-business cross-channel attribution and style learning",
+      "command": ["python3", "workspace/pipeline/test_campaign_learning.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "campaign-promotion-review",
+      "description": "Human-scoped email metadata promotion packets and checkpoint isolation",
+      "command": ["python3", "workspace/pipeline/test_campaign_promotion_review.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "live-contract-provenance",
+      "description": "Offline source-drift checks for observed live approval and send contracts",
+      "command": ["python3", "workspace/pipeline/test_live_contract_provenance.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "reply-intelligence",
+      "description": "Attributed intent, OOO-adjusted metrics, draft proposals, and non-execution safety",
+      "command": ["python3", "workspace/pipeline/test_reply_intelligence.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "delivery-planner",
+      "description": "Recipient ESP/gateway segmentation, explicit sender rotation, holds, quotas, and non-execution safety",
+      "command": ["python3", "workspace/pipeline/test_delivery_planner.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "quota-reservations",
+      "description": "Atomic domain/mailbox quota reservation, idempotency, expiry, reconciliation, and append-only safety",
+      "command": ["python3", "workspace/pipeline/test_quota_reservations.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "suppression-registry",
+      "description": "Minimized global email/domain/lead suppression, reason-specific reinstatement, idempotency, and append-only safety",
+      "command": ["python3", "workspace/pipeline/test_suppression_registry.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "replacement-readiness",
+      "description": "Twelve-layer offline evidence, normal and independent eval status, action safety, and fail-closed live replacement gates",
+      "command": ["python3", "workspace/pipeline/test_replacement_readiness.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "reply-workflow",
+      "description": "Lead-stable reply experiments, versioned resources, subsequence review state, and non-execution safety",
+      "command": ["python3", "workspace/pipeline/test_reply_workflow.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "webhook-gateway",
+      "description": "Authenticated provider webhook normalization, replay defense, quarantine, minimization, and ledger compatibility",
+      "command": ["python3", "workspace/pipeline/test_webhook_gateway.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "sequence-state",
+      "description": "Append-only sequence events, approval snapshots, reply/OOO/suppression transitions, idempotent replay, and review-only due actions",
+      "command": ["python3", "workspace/pipeline/test_sequence_state.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    },
+    {
+      "id": "maps-job-controller",
+      "description": "Maps timeout, retry, fallback, resumability, cost, exhaustion, and Place provenance state",
+      "command": ["python3", "workspace/pipeline/test_maps_job_controller.py"],
+      "owner_skill": "workspace/skills/scraper-improvement-loop.md"
+    },
+    {
+      "id": "directory-snapshot-compiler",
+      "description": "Declarative public-directory normalization, provenance, deduplication, and non-promotion safety",
+      "command": ["python3", "workspace/pipeline/test_directory_snapshot_compiler.py"],
+      "owner_skill": "workspace/skills/scraper-improvement-loop.md"
+    },
+    {
+      "id": "outbound-event-ledger",
+      "description": "Append-only canonical events, idempotency, attribution, unresolved state, and durable funnel metrics",
+      "command": ["python3", "workspace/pipeline/test_outbound_event_ledger.py"],
+      "owner_skill": "workspace/skills/campaign-style-orchestration.md"
+    }
+  ]
+}

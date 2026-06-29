@@ -1,0 +1,17 @@
+{
+  "schema_version": "outreach.quota-reservation-policy.v1",
+  "status": "offline_shadow",
+  "registry_path": "workspace/config/sender_registry.json",
+  "reservation_ttl_seconds": 900,
+  "safety": {
+    "provider_api_calls_allowed": false,
+    "email_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "production_registry_writes_allowed": false,
+    "events_are_append_only": true
+  },
+  "counting_statuses": ["active", "committed"],
+  "terminal_statuses": ["committed", "released", "expired"],
+  "quota_dimensions": ["domain_id", "sender_identity_id"],
+  "day_boundary": "UTC"
+}

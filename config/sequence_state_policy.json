@@ -1,0 +1,47 @@
+{
+  "schema_version": "outreach.sequence-state-policy.v1",
+  "event_schema_version": "outreach.sequence-event.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "provider_api_calls_allowed": false,
+    "email_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "automatic_resume_allowed": false,
+    "automatic_step_execution_allowed": false,
+    "events_are_append_only": true
+  },
+  "event_types": [
+    "enrollment_created",
+    "human_approval_recorded",
+    "step_delivered",
+    "reply_classified",
+    "paused",
+    "resumed",
+    "unsubscribed",
+    "complained",
+    "bounced",
+    "cancelled"
+  ],
+  "stop_intents": ["booking", "positive_interest", "unsubscribe"],
+  "review_intents": ["question", "objection", "negative", "unknown"],
+  "ooo_intent": "out_of_office",
+  "sequences": [
+    {
+      "sequence_id": "restaurant_default_v1",
+      "revision": 1,
+      "steps": [
+        {"step_id": "intro", "delay_hours": 0, "template_variant_id": "restaurant-intro-a"},
+        {"step_id": "proof", "delay_hours": 72, "template_variant_id": "restaurant-proof-a"},
+        {"step_id": "resource", "delay_hours": 96, "template_variant_id": "restaurant-resource-a", "resource_version_key": "statement-review-prep@1"}
+      ]
+    },
+    {
+      "sequence_id": "pharmacy_default_v1",
+      "revision": 1,
+      "steps": [
+        {"step_id": "intro", "delay_hours": 0, "template_variant_id": "pharmacy-intro-a"},
+        {"step_id": "question", "delay_hours": 96, "template_variant_id": "pharmacy-question-a"}
+      ]
+    }
+  ]
+}

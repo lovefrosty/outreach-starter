@@ -1,0 +1,16 @@
+{
+  "schema_version": "outreach.suppression-policy.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "provider_api_calls_allowed": false,
+    "email_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "raw_email_storage_allowed": false,
+    "automatic_reinstatement_allowed": false,
+    "events_are_append_only": true
+  },
+  "subject_types": ["email_sha256", "domain_sha256", "lead_id"],
+  "reasons": ["unsubscribe", "complaint", "hard_bounce", "legal", "do_not_contact", "manual_review"],
+  "reinstatement_bases": ["verified_consent", "provider_correction", "manual_error"],
+  "event_types": ["suppression_applied", "reinstatement_recorded"]
+}

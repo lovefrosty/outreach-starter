@@ -1,0 +1,38 @@
+{
+  "schema_version": "outreach.campaign-research-contract.v1",
+  "envelope_schema_version": "outreach.research-envelope.v1",
+  "required_source_fields": [
+    "adapter",
+    "source_url",
+    "external_id",
+    "captured_at",
+    "source_artifact_sha256"
+  ],
+  "allowed_observed_fields": [
+    "processor",
+    "tech_signals"
+  ],
+  "required_entity_fields": [
+    "company",
+    "website"
+  ],
+  "prohibited_observed_fields": [
+    "pain_theme",
+    "pain_tier",
+    "propensity",
+    "processing_volume",
+    "internal_notes",
+    "private_pain"
+  ],
+  "evidence_requirements": {
+    "content_sha256_required": true,
+    "field_url_must_match_source_url_or_website": true,
+    "locator_required": true
+  },
+  "legacy_policy": {
+    "adapter_key_is_not_provenance": true,
+    "free_text_review_provenance_accepted": false,
+    "missing_provenance_may_be_inferred": false,
+    "eligible_action": "audit_only"
+  }
+}

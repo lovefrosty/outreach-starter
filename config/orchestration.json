@@ -1,0 +1,173 @@
+{
+  "schema_version": "outreach.orchestration.v1",
+  "principles": {
+    "external_action_requires_human_approval": true,
+    "queued_is_not_sent": true,
+    "evidence_before_inference": true,
+    "lane_data_must_remain_separate": true,
+    "automations_start_disabled": true,
+    "optimize_cost_per_verified_value_not_cost_per_run": true
+  },
+  "roles": {
+    "scraper": "Collect public facts and preserve source URLs. Never infer private operations.",
+    "verifier": "Run deterministic checks, label uncertainty, and block on failed acceptance criteria.",
+    "router": "Apply explicit policy to choose the next lane, stage, or human checkpoint.",
+    "drafter": "Create constrained drafts from verified evidence and approved offer/copy rules.",
+    "orchestrator": "Persist run state, retries, artifacts, metrics, and checkpoint readiness.",
+    "human": "Approve, reject, or request changes with an auditable note.",
+    "executor": "Perform only the exact approved deterministic action and record its outcome.",
+    "builder": "Change one bounded system component, prove it in sandbox/shadow mode, and request promotion."
+  },
+  "lanes": {
+    "acme": {
+      "data_boundary": "Acme lead database and Telegram approval surface only",
+      "workflows": {
+        "outbound": {
+          "stages": [
+            {"id": "source", "owner": "scraper"},
+            {"id": "scrape", "owner": "scraper"},
+            {"id": "verify_contact", "owner": "verifier"},
+            {"id": "qualify", "owner": "router"},
+            {"id": "draft", "owner": "drafter"},
+            {"id": "review_outreach", "owner": "human", "checkpoint": true},
+            {"id": "execute_approved_send", "owner": "executor"},
+            {"id": "measure", "owner": "verifier"},
+            {"id": "improve", "owner": "builder", "checkpoint": true}
+          ]
+        },
+        "reply_funnel": {
+          "stages": [
+            {"id": "ingest_reply", "owner": "scraper"},
+            {"id": "classify_intent", "owner": "router"},
+            {"id": "verify_classification", "owner": "verifier"},
+            {"id": "draft_response", "owner": "drafter"},
+            {"id": "review_response", "owner": "human", "checkpoint": true},
+            {"id": "execute_approved_response", "owner": "executor"},
+            {"id": "measure_conversion", "owner": "verifier"}
+          ]
+        },
+        "builder_iteration": {
+          "stages": [
+            {"id": "value_benchmark", "owner": "human", "checkpoint": true},
+            {"id": "baseline_repeated_runs", "owner": "verifier"},
+            {"id": "bounded_change", "owner": "builder"},
+            {"id": "unit_and_fixture_tests", "owner": "verifier"},
+            {"id": "layered_shadow_runs", "owner": "verifier"},
+            {"id": "compare_value_economics", "owner": "verifier"},
+            {"id": "review_promotion", "owner": "human", "checkpoint": true},
+            {"id": "promote_or_rollback", "owner": "executor"}
+          ]
+        },
+        "creative_campaign": {
+          "stages": [
+            {"id": "collect_public_research", "owner": "scraper"},
+            {"id": "grade_claim_evidence", "owner": "verifier"},
+            {"id": "select_campaign_style", "owner": "router"},
+            {"id": "convene_marketing_team", "owner": "orchestrator"},
+            {"id": "compile_brand_channel_system", "owner": "drafter"},
+            {"id": "review_claims_rights_and_spend", "owner": "human", "checkpoint": true},
+            {"id": "render_approved_higgsfield_assets", "owner": "executor"},
+            {"id": "verify_rendered_assets", "owner": "verifier"},
+            {"id": "review_exact_launch_assets", "owner": "human", "checkpoint": true},
+            {"id": "publish_approved_campaign", "owner": "executor"},
+            {"id": "classify_campaign_replies", "owner": "router"},
+            {"id": "prepare_intent_specific_resources", "owner": "drafter"},
+            {"id": "review_exact_reply", "owner": "human", "checkpoint": true},
+            {"id": "measure_style_outcomes", "owner": "verifier"},
+            {"id": "propose_style_learning", "owner": "builder", "checkpoint": true}
+          ]
+        }
+      }
+    },
+    "ai_consulting": {
+      "data_boundary": "Separate AI Consulting database and local terminal review; no Acme Telegram",
+      "workflows": {
+        "customer_discovery": {
+          "stages": [
+            {"id": "source", "owner": "scraper"},
+            {"id": "scrape", "owner": "scraper"},
+            {"id": "verify_contact", "owner": "verifier"},
+            {"id": "score_fit", "owner": "router"},
+            {"id": "build_research_pack", "owner": "drafter"},
+            {"id": "select_accounts", "owner": "human", "checkpoint": true},
+            {"id": "draft_outreach", "owner": "drafter"},
+            {"id": "review_outreach", "owner": "human", "checkpoint": true},
+            {"id": "manual_send", "owner": "human"},
+            {"id": "measure", "owner": "verifier"}
+          ]
+        },
+        "social_intent_research": {
+          "stages": [
+            {"id": "collect_public_social_web_signals", "owner": "scraper"},
+            {"id": "normalize_research_evidence", "owner": "verifier"},
+            {"id": "write_shared_research_signals", "owner": "orchestrator"},
+            {"id": "summarize_safe_handoff", "owner": "drafter"},
+            {"id": "review_research_only", "owner": "human", "checkpoint": true}
+          ]
+        },
+        "builder_iteration": {
+          "stages": [
+            {"id": "value_benchmark", "owner": "human", "checkpoint": true},
+            {"id": "baseline_repeated_runs", "owner": "verifier"},
+            {"id": "bounded_change", "owner": "builder"},
+            {"id": "unit_and_fixture_tests", "owner": "verifier"},
+            {"id": "layered_shadow_runs", "owner": "verifier"},
+            {"id": "compare_value_economics", "owner": "verifier"},
+            {"id": "review_promotion", "owner": "human", "checkpoint": true},
+            {"id": "promote_or_rollback", "owner": "executor"}
+          ]
+        }
+      }
+    }
+  },
+  "automations": [
+    {
+      "id": "acme-morning-control-brief",
+      "lane": "acme",
+      "schedule": "weekdays 08:00 America/New_York",
+      "status": "disabled",
+      "mode": "read_only",
+      "output": "pipeline health, decision queue, due calls, send readiness, one next action"
+    },
+    {
+      "id": "acme-reply-triage",
+      "lane": "acme",
+      "schedule": "event-driven on reply",
+      "status": "disabled",
+      "mode": "draft_only",
+      "output": "intent label, confidence, evidence, draft response, human checkpoint"
+    },
+    {
+      "id": "ai-consulting-customer-discovery",
+      "lane": "ai_consulting",
+      "schedule": "weekdays 08:00 America/New_York",
+      "status": "disabled",
+      "mode": "research_only",
+      "output": "25-50 candidates, five evidence-backed packs, selection checkpoint"
+    },
+    {
+      "id": "weekly-system-learning-review",
+      "lane": "acme",
+      "schedule": "Friday 16:00 America/New_York",
+      "status": "disabled",
+      "mode": "proposal_only",
+      "output": "metric deltas, failure clusters, proposed single changes, promotion checkpoints"
+    },
+    {
+      "id": "nightly-builder-shadow-run",
+      "lane": "acme",
+      "schedule": "daily 23:00 America/New_York",
+      "status": "disabled",
+      "mode": "sandbox_only",
+      "output": "baseline comparison, test evidence, no production promotion"
+    },
+    {
+      "id": "acme-creative-campaign-lab",
+      "lane": "acme",
+      "schedule": "manual or explicitly approved campaign trigger",
+      "status": "disabled",
+      "mode": "draft_only",
+      "output": "source-backed campaign brief, versioned style, Higgsfield render manifest, human checkpoints"
+    }
+  ]
+}

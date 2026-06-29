@@ -1,0 +1,123 @@
+{
+  "_comment": "Source registry. Adding a live source = implement its adapter + add a block here. active=false means disabled or planned; verify adapter availability before enabling. 'gets' documents which signals a source provides.",
+  "sources": {
+    "places_direct": {
+      "active": true,
+      "adapter": "places_adapter",
+      "gets": [
+        "places",
+        "reviews"
+      ],
+      "needs_key": "GOOGLE_PLACES_API_KEY",
+      "cost_per": 0.0,
+      "note": "Fallback: only runs if Apify (primary) returns nothing \u2014 out of credits / error / empty.",
+      "fallback": true
+    },
+    "apify_maps": {
+      "active": true,
+      "adapter": "apify_adapter",
+      "daily_cap": 500,
+      "cost_per": 0.007,
+      "gets": [
+        "places",
+        "reviews"
+      ],
+      "needs_key": "APIFY_TOKEN",
+      "note": "Places/Maps at scale + Google reviews. Wave 1."
+    },
+    "opencorporates": {
+      "active": false,
+      "adapter": "opencorporates_adapter",
+      "daily_cap": 200,
+      "cost_per": 0.0,
+      "gets": [
+        "officer_names"
+      ],
+      "needs_key": "OPENCORP_KEY",
+      "note": "Optional legacy enricher. Disabled: do not treat OpenCorporates as a core dependency."
+    },
+    "website_scrape": {
+      "active": true,
+      "adapter": "builtin_c2",
+      "daily_cap": 1000,
+      "cost_per": 0.0,
+      "gets": [
+        "emails",
+        "owner",
+        "processor",
+        "reviews"
+      ],
+      "note": "Self-hosted (C2 node), no key. Always on."
+    },
+    "newfilings_nj": {
+      "active": false,
+      "adapter": "nj_license_adapter",
+      "daily_cap": 500,
+      "cost_per": 0.0,
+      "gets": [
+        "license_roster",
+        "seed_rows",
+        "no_website"
+      ],
+      "note": "Implemented as inactive NJ business-download license roster seed adapter. Dry-run uses deterministic fixture; live mode requires official roster_path from https://newjersey.mylicense.com/Verification_Bulk/Search.aspx?facility=Y. Seed rows need resolver promotion before C2."
+    },
+    "dealership_directory": {
+      "active": false,
+      "adapter": "dealership_directory_adapter",
+      "daily_cap": 250,
+      "cost_per": 0.0,
+      "gets": [
+        "dealer_seed_rows",
+        "brand",
+        "group_ownership",
+        "dealer_platform_clues",
+        "service_payment_workflow_clues",
+        "decision_maker_signals"
+      ],
+      "note": "Source-first dealership seeds from OEM locators, dealer group pages, marketplace listings, dealer platform footprints, license rosters, and associations. Inactive until a resolver writes seed/research lanes before C2."
+    },
+    "restaurant_directory": {
+      "active": false,
+      "adapter": "restaurant_directory_adapter",
+      "daily_cap": 500,
+      "cost_per": 0.0,
+      "gets": [
+        "restaurant_seed_rows",
+        "places_profile",
+        "reservation_delivery_ordering_clues",
+        "pos_payment_clues",
+        "multi_location_signals",
+        "owner_operator_evidence",
+        "social_links"
+      ],
+      "note": "Source-first restaurant seeds from Places-style exports, OpenTable/Resy, Toast/ChowNow/Slice/delivery profiles, associations, tourism pages, chambers, and local lists. Inactive until a resolver writes seed/research lanes before C2."
+    },
+    "pharmacy_directory": {
+      "active": false,
+      "adapter": "pharmacy_directory_adapter",
+      "daily_cap": 300,
+      "cost_per": 0.0,
+      "gets": [
+        "pharmacy_seed_rows",
+        "license_status",
+        "pharmacy_type",
+        "counter_workflow_clues",
+        "inventory_payment_patient_data_signals",
+        "owner_pharmacist_evidence"
+      ],
+      "note": "Source-first pharmacy seeds from state pharmacy boards, license rosters, NCPA, Good Neighbor, Health Mart, CPESN, associations, and local directories. Inactive until a resolver writes seed/research lanes before C2."
+    },
+    "social_intent": {
+      "active": false,
+      "adapter": "social_intent_adapter",
+      "daily_cap": 100,
+      "cost_per": 0.0,
+      "gets": [
+        "public_social_signals",
+        "public_web_signals",
+        "research_intent"
+      ],
+      "note": "Research-only public social/web intent lane. Writes shared_context.research_signals through workspace/pipeline/social_intent.py; never promotes leads, queues outreach, sends, approves, or mutates CRM."
+    }
+  }
+}

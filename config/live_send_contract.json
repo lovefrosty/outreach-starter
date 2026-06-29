@@ -1,0 +1,117 @@
+{
+  "schema_version": "outreach.live-send-contract.v1",
+  "captured_at": "2026-06-13T06:18:00Z",
+  "status": "observed_read_only",
+  "sources": {
+    "sender": {
+      "path": "/home/outreach/.outreach/pipeline/nodes/c7_sender.py",
+      "sha256": "7345c20a937c00e00fbc41cdcacd4f984b21210078053ad426b12adb14abf18f"
+    },
+    "human_approval": {
+      "path": "/home/outreach/.outreach/scripts/outreach_bot.py",
+      "sha256": "09ed403644a35e865fb66cd7977d2b6db9790615dae5adf2f2f537a8164aaf18"
+    },
+    "legacy_policy": {
+      "path": "/home/outreach/.outreach/references/gates.yaml",
+      "sha256": "12ccf4fd5ba82f0511ec072fac7c24fb26861eeb48b28692014aacb3c6b43aec"
+    },
+    "orchestrator": {
+      "path": "/home/outreach/.outreach/pipeline/orchestrator.py",
+      "sha256": "56f435835b359cfa4b0002b5d9032d7418f3467e21428445a438dc2d5a3487d2"
+    },
+    "scheduled_pipeline": {
+      "path": "/home/outreach/.outreach/pipeline/daily_pipeline.py",
+      "sha256": "6b20fda32024f46ce260ddf0277b0718864ebbf467afacd8822a0eee36635028"
+    }
+  },
+  "human_approval": {
+    "signal": "stage",
+    "approved_value": "queued",
+    "transition": "personalized_to_queued",
+    "audit_field": "approved_at",
+    "audit_event": "telegram_approved",
+    "does_not_send": true,
+    "campaign_genome_integration_allowed": false,
+    "observed_security_blockers": [
+      {
+        "id": "telegram_operator_allowlist_missing",
+        "severity": "critical",
+        "detail": "Private messages are not restricted to an approved Telegram user id."
+      },
+      {
+        "id": "telegram_callback_origin_unverified",
+        "severity": "critical",
+        "detail": "Approval callbacks are not rejected when they originate outside the configured operator chat."
+      },
+      {
+        "id": "telegram_actor_attribution_unverified",
+        "severity": "high",
+        "detail": "approved_by is derived from an unverified first_name rather than an authorized immutable user id."
+      },
+      {
+        "id": "telegram_allsend_unbounded",
+        "severity": "critical",
+        "detail": "allsend is unbounded and selects all matching personalized leads at callback time."
+      },
+      {
+        "id": "telegram_skip_audit_missing",
+        "severity": "medium",
+        "detail": "The skip path mutates lead state without emitting a corresponding audit event."
+      }
+    ]
+  },
+  "live_send": {
+    "candidate_stage": "queued",
+    "non_dry_run_enabler": {
+      "environment_variable": "PIPELINE_SENDING_ENABLED",
+      "operator": "exact_string_equal",
+      "value": "1"
+    },
+    "ordered_holds": [
+      "sending_enabled",
+      "email_present",
+      "trigger_evidence_when_present",
+      "suppression",
+      "already_uploaded_deduplication",
+      "daily_cap",
+      "provider_configuration",
+      "provider_success"
+    ],
+    "default_daily_cap": 20,
+    "success_transition": "queued_to_sent",
+    "provider_success_required_before_sent": true,
+    "failure_behavior": "return_false_and_leave_queued"
+  },
+  "automation_boundary": {
+    "status": "verified_no_automatic_queue_or_send",
+    "orchestrator_stage_order": [
+      "pulled",
+      "scraped",
+      "analyzed",
+      "guessed",
+      "verified"
+    ],
+    "highest_automated_output_stage": "personalized",
+    "orchestrator_can_target_personalized": false,
+    "orchestrator_can_target_queued": false,
+    "orchestrator_imports_c7": false,
+    "scheduled_pipeline_invokes_c7": false,
+    "scheduled_pipeline_calls_orchestrator": true,
+    "cron_invokes_c7": false,
+    "queued_writers": [
+      "outreach_bot.appr_send",
+      "outreach_bot.appr_allsend"
+    ],
+    "live_c7_caller": "outreach_bot.cmd_send_queued",
+    "known_redeployment_risks": [
+      "Non-live backup orchestrator files contain queued/C7 auto-dispatch logic and must not be restored without a fresh source audit."
+    ]
+  },
+  "legacy_gates_policy": {
+    "runtime_enforced": false,
+    "evaluator_deployed": false,
+    "qa_result_live_field_exists": false,
+    "approval_status_live_field_exists": false,
+    "use": "policy_provenance_only"
+  }
+}

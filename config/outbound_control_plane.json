@@ -1,0 +1,220 @@
+{
+  "schema_version": "outreach.outbound-control-plane.v1",
+  "status": "architecture_only",
+  "execution": {
+    "enabled": false,
+    "provider_api_calls_allowed": false,
+    "email_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "production_routing_change_allowed": false
+  },
+  "canonical_ids": [
+    "company_id",
+    "lead_id",
+    "campaign_id",
+    "style_id",
+    "sequence_id",
+    "sequence_instance_id",
+    "template_variant_id",
+    "sender_identity_id",
+    "sender_domain_id",
+    "sender_service_group_id",
+    "delivery_decision_id",
+    "reply_workflow_id",
+    "reply_experiment_id",
+    "reply_variant_id",
+    "resource_version_key",
+    "source_job_id",
+    "source_event_id",
+    "source_snapshot_id",
+    "source_external_id",
+    "provider_event_id",
+    "provider_message_id",
+    "message_id",
+    "thread_id",
+    "event_id"
+  ],
+  "layers": [
+    {
+      "id": "source",
+      "status": "partial",
+      "components": ["google_maps_adapters", "resumable_maps_job_state", "directory_adapters", "declarative_directory_snapshot_compiler", "source_provenance"]
+    },
+    {
+      "id": "enrichment",
+      "status": "working",
+      "components": ["C2_scrape", "C3_analysis", "C6_personalization"]
+    },
+    {
+      "id": "campaign_genome",
+      "status": "offline_working",
+      "components": ["style_manifest", "claim_evidence", "resource_library", "human_review"]
+    },
+    {
+      "id": "delivery_policy",
+      "status": "offline_shadow",
+      "components": ["sender_pools", "domain_health", "recipient_esp_segments", "security_gateway_segments", "global_suppression_registry", "transactional_quota_reservations", "dry_run_planner"]
+    },
+    {
+      "id": "reply_intelligence",
+      "status": "offline_shadow",
+      "components": ["authenticated_webhook_normalizer", "event_ingest", "intent_evidence", "lead_stable_reply_experiments", "immutable_sequence_state", "draft_proposals", "resource_registry", "subsequence_proposals"]
+    },
+    {
+      "id": "measurement",
+      "status": "offline_shadow",
+      "components": ["append_only_event_ledger", "ooo_adjusted_rates", "per_email_rates", "per_lead_rates", "variant_attribution", "webhook_to_draft_latency"]
+    },
+    {
+      "id": "learning",
+      "status": "offline_working",
+      "components": ["eval_compounding", "campaign_learning", "human_approved_skill_updates"]
+    }
+  ],
+  "source_policy_contract": {
+    "implementation": {
+      "status": "offline_shadow",
+      "directory_manifest": "workspace/config/directory_sources.json",
+      "directory_compiler": "workspace/pipeline/directory_snapshot_compiler.py",
+      "configured_public_sources": 2,
+      "external_fetch_implemented": false,
+      "database_write_implemented": false,
+      "automatic_lead_promotion_implemented": false
+    },
+    "required_provenance": [
+      "source_snapshot_id",
+      "source_external_id",
+      "source_url",
+      "captured_at",
+      "source_artifact_sha256",
+      "row_sha256",
+      "field_evidence"
+    ],
+    "required_fail_closed_states": [
+      "unknown_source",
+      "unapproved_robots_policy",
+      "missing_terms_review_boundary",
+      "invalid_source_url",
+      "invalid_website",
+      "prohibited_private_or_inferred_field",
+      "conflicting_duplicate_external_id"
+    ]
+  },
+  "webhook_gateway_contract": {
+    "implementation": {
+      "status": "offline_shadow",
+      "policy": "workspace/config/webhook_gateway.json",
+      "normalizer": "workspace/pipeline/webhook_gateway.py",
+      "configured_provider_profiles": 2,
+      "http_listener_implemented": false,
+      "secret_manager_integration_implemented": false,
+      "queue_or_ledger_write_implemented": false,
+      "workflow_invocation_implemented": false
+    },
+    "authentication": "hmac_sha256_timestamped_raw_body",
+    "required_controls": [
+      "constant_time_signature_comparison",
+      "bounded_replay_window",
+      "deterministic_event_id",
+      "provider_event_id_deduplication",
+      "complete_message_attribution",
+      "secure_payload_reference_for_replies",
+      "raw_body_minimization",
+      "unsupported_event_quarantine"
+    ]
+  },
+  "sequence_state_contract": {
+    "implementation": {
+      "status": "offline_shadow",
+      "policy": "workspace/config/sequence_state_policy.json",
+      "event_store_and_reducer": "workspace/pipeline/sequence_state.py",
+      "production_writer_implemented": false,
+      "provider_delivery_adapter_implemented": false,
+      "step_executor_implemented": false
+    },
+    "terminal_or_paused_inputs": [
+      "positive_reply",
+      "booking",
+      "unsubscribe",
+      "complaint",
+      "hard_bounce",
+      "soft_bounce_review",
+      "question_or_objection_review",
+      "manual_pause",
+      "ooo_defer"
+    ],
+    "automatic_resume_allowed": false,
+    "automatic_step_execution_allowed": false,
+    "due_output": "pending_human_send_review"
+  },
+  "suppression_contract": {
+    "implementation": {
+      "status": "offline_shadow",
+      "policy": "workspace/config/suppression_policy.json",
+      "registry": "workspace/pipeline/suppression_registry.py",
+      "production_event_writer_implemented": false,
+      "delivery_gate_integration_implemented": false
+    },
+    "subject_types": ["email_sha256", "domain_sha256", "lead_id"],
+    "reasons": ["unsubscribe", "complaint", "hard_bounce", "legal", "do_not_contact", "manual_review"],
+    "automatic_reinstatement_allowed": false,
+    "required_delivery_decision": "eligible_for_other_checks"
+  },
+  "delivery_policy_contract": {
+    "sender_selection_inputs": [
+      "approved_campaign_route",
+      "recipient_mx_segment",
+      "sender_domain_health",
+      "mailbox_health",
+      "daily_domain_quota",
+      "daily_mailbox_quota",
+      "suppression_status"
+    ],
+    "required_fail_closed_states": [
+      "dns_not_ready",
+      "domain_paused",
+      "mailbox_paused",
+      "quota_exhausted",
+      "recipient_suppressed",
+      "route_unapproved",
+      "provider_unhealthy",
+      "domain_unhealthy",
+      "mailbox_unhealthy",
+      "domain_quota_exhausted",
+      "mailbox_quota_exhausted",
+      "recipient_mx_stale",
+      "recipient_segment_unknown",
+      "human_approval_missing"
+    ],
+    "rotation_policy": "deterministic_weighted_healthy_pool",
+    "opaque_provider_rotation_allowed": false,
+    "implementation": {
+      "status": "offline_shadow",
+      "planner": "workspace/pipeline/delivery_planner.py",
+      "registry": "workspace/config/sender_registry.json",
+      "recipient_segmentation": "workspace/config/recipient_esp_rules.json",
+      "quota_reservation_policy": "workspace/config/quota_reservation_policy.json",
+      "quota_reservation_store": "workspace/pipeline/quota_reservations.py",
+      "provider_adapter_implemented": false,
+      "dns_lookup_implemented": false,
+      "offline_transactional_quota_reservation_implemented": true,
+      "production_usage_persistence_implemented": false
+    }
+  },
+  "replacement_gate": {
+    "instantly_can_be_retired": false,
+    "requirements": "workspace/config/replacement_requirements.json",
+    "evaluator": "workspace/pipeline/replacement_readiness.py",
+    "required_evidence": [
+      "event_parity",
+      "bounce_and_complaint_parity",
+      "unsubscribe_enforcement",
+      "sender_health_visibility",
+      "sequence_and_pause_parity",
+      "reply_webhook_reliability",
+      "human_approval_preserved",
+      "auditable_canary_results",
+      "all_production_gates_evidenced"
+    ]
+  }
+}

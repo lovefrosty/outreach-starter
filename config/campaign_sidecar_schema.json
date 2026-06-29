@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/campaign-genome-sidecar.v1.json",
+  "title": "Campaign Genome Draft Sidecar",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "business_id",
+    "campaign_id",
+    "style",
+    "email_mapping",
+    "manifest",
+    "promotion",
+    "safety"
+  ],
+  "properties": {
+    "schema_version": {"const": "outreach.campaign-sidecar.v1"},
+    "business_id": {"type": "string", "minLength": 1},
+    "campaign_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+    "style": {
+      "type": "object",
+      "required": ["style_id", "version", "sha256"],
+      "properties": {
+        "style_id": {"type": "string"},
+        "version": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "email_mapping": {
+      "type": "object",
+      "required": [
+        "status",
+        "email_template_key",
+        "email_sequence",
+        "promotable",
+        "eligible_routes",
+        "registry_sha256",
+        "live_metadata_written"
+      ],
+      "properties": {
+        "status": {"enum": ["unmapped", "proposed", "approved"]},
+        "email_template_key": {"type": ["string", "null"]},
+        "email_sequence": {"type": ["string", "null"]},
+        "promotable": {"type": "boolean"},
+        "eligible_routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["vertical", "variant"],
+            "properties": {
+              "vertical": {"type": "string", "minLength": 1},
+              "variant": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        },
+        "registry_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "live_metadata_written": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["status", "requires_human_approval"],
+      "properties": {
+        "status": {"const": "draft"},
+        "requires_human_approval": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "safety": {
+      "type": "object",
+      "required": ["live_db_write_allowed", "send_allowed", "publish_allowed", "render_allowed"],
+      "properties": {
+        "live_db_write_allowed": {"const": false},
+        "send_allowed": {"const": false},
+        "publish_allowed": {"const": false},
+        "render_allowed": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

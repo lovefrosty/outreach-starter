@@ -1,0 +1,49 @@
+{
+  "schema_version": "outreach.outbound-event-ledger-policy.v1",
+  "event_schema_version": "outreach.outbound-event.v1",
+  "status": "offline_shadow",
+  "safety": {
+    "provider_api_calls_allowed": false,
+    "email_send_allowed": false,
+    "live_crm_writes_allowed": false,
+    "raw_message_body_storage_allowed": false,
+    "events_are_append_only": true
+  },
+  "event_types": [
+    "message_registered",
+    "provider_accepted",
+    "delivered",
+    "bounced",
+    "complained",
+    "unsubscribed",
+    "reply_received",
+    "draft_ready",
+    "booking_recorded"
+  ],
+  "required_message_fields": [
+    "message_id",
+    "lead_id",
+    "thread_id",
+    "campaign_id",
+    "template_variant_id",
+    "sender_identity_id"
+  ],
+  "forbidden_attribute_keys": [
+    "body",
+    "raw_body",
+    "email_content",
+    "html",
+    "text",
+    "authorization",
+    "api_key",
+    "token",
+    "password",
+    "secret"
+  ],
+  "retention": {
+    "payload_content": "external_secure_store_reference_only",
+    "payload_sha256_required": true,
+    "payload_ref_required_for_reply_received": true,
+    "deletion_policy": "not_implemented_requires_human_design"
+  }
+}

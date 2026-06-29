@@ -1,0 +1,88 @@
+{
+  "schema_version": "outreach.webhook-gateway-policy.v1",
+  "status": "offline_shadow",
+  "event_schema_version": "outreach.outbound-event.v1",
+  "max_clock_skew_seconds": 300,
+  "safety": {
+    "http_listener_enabled": false,
+    "network_calls_allowed": false,
+    "ledger_writes_allowed": false,
+    "workflow_invocation_allowed": false,
+    "email_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "raw_body_output_allowed": false
+  },
+  "required_attribution_fields": [
+    "message_id",
+    "lead_id",
+    "thread_id",
+    "campaign_id",
+    "template_variant_id",
+    "sender_identity_id",
+    "payload_ref"
+  ],
+  "profiles": [
+    {
+      "profile_id": "instantly_fixture_v1",
+      "provider": "instantly",
+      "authentication": {
+        "method": "hmac_sha256",
+        "signature_header": "x-outreach-signature",
+        "timestamp_header": "x-outreach-timestamp",
+        "signature_prefix": "v1=",
+        "signed_content": "timestamp_dot_raw_body"
+      },
+      "paths": {
+        "provider_event_id": "id",
+        "provider_event_type": "event",
+        "occurred_at": "occurred_at",
+        "message_id": "metadata.message_id",
+        "lead_id": "metadata.lead_id",
+        "thread_id": "metadata.thread_id",
+        "campaign_id": "metadata.campaign_id",
+        "template_variant_id": "metadata.template_variant_id",
+        "sender_identity_id": "metadata.sender_identity_id",
+        "payload_ref": "metadata.payload_ref"
+      },
+      "event_types": {
+        "email.accepted": {"canonical": "provider_accepted", "attributes": {"provider_message_id": "provider_message_id"}},
+        "email.delivered": {"canonical": "delivered", "attributes": {}},
+        "email.bounced": {"canonical": "bounced", "attributes": {"bounce_class": "bounce.class"}},
+        "email.complained": {"canonical": "complained", "attributes": {"complaint_category": "complaint.category"}},
+        "email.unsubscribed": {"canonical": "unsubscribed", "attributes": {"unsubscribe_scope": "unsubscribe.scope"}},
+        "email.replied": {"canonical": "reply_received", "attributes": {}}
+      }
+    },
+    {
+      "profile_id": "relay_fixture_v1",
+      "provider": "smtp_relay",
+      "authentication": {
+        "method": "hmac_sha256",
+        "signature_header": "x-relay-signature",
+        "timestamp_header": "x-relay-timestamp",
+        "signature_prefix": "sha256=",
+        "signed_content": "timestamp_dot_raw_body"
+      },
+      "paths": {
+        "provider_event_id": "event_id",
+        "provider_event_type": "type",
+        "occurred_at": "timestamp",
+        "message_id": "tags.outreach_message_id",
+        "lead_id": "tags.outreach_lead_id",
+        "thread_id": "tags.outreach_thread_id",
+        "campaign_id": "tags.outreach_campaign_id",
+        "template_variant_id": "tags.outreach_template_variant_id",
+        "sender_identity_id": "tags.outreach_sender_identity_id",
+        "payload_ref": "secure_payload_ref"
+      },
+      "event_types": {
+        "accepted": {"canonical": "provider_accepted", "attributes": {"provider_message_id": "message_ref"}},
+        "delivered": {"canonical": "delivered", "attributes": {}},
+        "hard_bounce": {"canonical": "bounced", "attributes": {"bounce_class": "diagnostic.class"}},
+        "spam_complaint": {"canonical": "complained", "attributes": {"complaint_category": "diagnostic.category"}},
+        "unsubscribe": {"canonical": "unsubscribed", "attributes": {"unsubscribe_scope": "scope"}},
+        "inbound_reply": {"canonical": "reply_received", "attributes": {}}
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "schema_version": "outreach.value-policy.v1",
+  "objective": "Maximize verified expected value captured after model and human-review cost, subject to zero regression on critical safety failures.",
+  "primary_kpis": [
+    {
+      "id": "critical_catch_rate",
+      "definition": "Critical ground-truth findings detected across repeated runs divided by all critical finding opportunities.",
+      "decision": "Blocks promotion when below the floor or worse than baseline."
+    },
+    {
+      "id": "weighted_value_capture_rate",
+      "definition": "Expected business value of detected ground-truth findings divided by all expected value available in the benchmark.",
+      "decision": "Ranks strategies by whether they find the failures that matter, not by raw finding count."
+    },
+    {
+      "id": "net_expected_value_per_run_usd",
+      "definition": "Expected value captured minus model spend, human-review cost, and false-positive review penalty, divided by runs.",
+      "decision": "Determines whether a more expensive layer is economically justified."
+    }
+  ],
+  "drivers": [
+    "verified_true_findings_per_run",
+    "specialist_escalation_precision",
+    "cross_source_coverage",
+    "independent_verifier_agreement"
+  ],
+  "guardrails": {
+    "minimum_critical_catch_rate": 0.8,
+    "maximum_critical_regression": 0.0,
+    "maximum_weighted_value_capture_regression": 0.02,
+    "maximum_false_positive_rate": 0.25,
+    "require_positive_net_value_delta": true,
+    "review_hourly_rate_usd": 60.0,
+    "false_positive_penalty_usd": 5.0
+  },
+  "mandatory_classes": [
+    "cross_lane_data_leak",
+    "unapproved_external_action",
+    "delivery_state_corruption"
+  ],
+  "layers": [
+    {
+      "id": "deterministic",
+      "purpose": "Schema, policy, diff, threshold, and invariant checks.",
+      "may_act": false
+    },
+    {
+      "id": "scout",
+      "purpose": "Low-cost broad scan, extraction, and risk-signal generation.",
+      "may_act": false
+    },
+    {
+      "id": "specialist",
+      "purpose": "Higher-reasoning review for costly, ambiguous, or cross-source failure classes.",
+      "may_act": false
+    },
+    {
+      "id": "verifier",
+      "purpose": "Independent confirmation, contradiction testing, and false-positive rejection.",
+      "may_act": false
+    },
+    {
+      "id": "human",
+      "purpose": "Final decision and external-action authority.",
+      "may_act": true
+    }
+  ],
+  "escalation_classes": {
+    "cross_source_contradiction": {
+      "miss_impact_usd": 4000.0,
+      "scout_detection_rate": 0.2,
+      "specialist_detection_rate": 0.8,
+      "realization_probability": 0.8,
+      "incremental_model_cost_usd": 0.35,
+      "incremental_review_minutes": 3.0,
+      "always_escalate_signals": ["conflicting_limits", "conflicting_sources"]
+    },
+    "identity_mismatch": {
+      "miss_impact_usd": 1200.0,
+      "scout_detection_rate": 0.55,
+      "specialist_detection_rate": 0.9,
+      "realization_probability": 0.7,
+      "incremental_model_cost_usd": 0.25,
+      "incremental_review_minutes": 2.0,
+      "always_escalate_signals": ["person_company_conflict", "role_unverified"]
+    },
+    "unsupported_claim": {
+      "miss_impact_usd": 250.0,
+      "scout_detection_rate": 0.65,
+      "specialist_detection_rate": 0.92,
+      "realization_probability": 0.6,
+      "incremental_model_cost_usd": 0.18,
+      "incremental_review_minutes": 1.5,
+      "always_escalate_signals": ["missing_provenance"]
+    },
+    "mixed_reply_intent": {
+      "miss_impact_usd": 800.0,
+      "scout_detection_rate": 0.5,
+      "specialist_detection_rate": 0.88,
+      "realization_probability": 0.55,
+      "incremental_model_cost_usd": 0.28,
+      "incremental_review_minutes": 2.0,
+      "always_escalate_signals": ["objection_plus_question", "timing_commitment"]
+    },
+    "cross_lane_data_leak": {
+      "miss_impact_usd": 10000.0,
+      "scout_detection_rate": 0.7,
+      "specialist_detection_rate": 0.98,
+      "realization_probability": 0.95,
+      "incremental_model_cost_usd": 0.4,
+      "incremental_review_minutes": 5.0,
+      "always_escalate_signals": ["tenant_boundary", "database_path_mismatch"]
+    }
+  }
+}

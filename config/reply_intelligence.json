@@ -1,0 +1,118 @@
+{
+  "schema_version": "outreach.reply-intelligence-policy.v1",
+  "classification": {
+    "precedence": [
+      "unsubscribe",
+      "out_of_office",
+      "not_interested",
+      "booking",
+      "positive_interest",
+      "objection",
+      "question",
+      "ambiguous"
+    ],
+    "intents": {
+      "unsubscribe": {
+        "phrases": [
+          "unsubscribe",
+          "remove me",
+          "stop emailing",
+          "do not contact",
+          "don't contact"
+        ],
+        "proposed_action": "suppress",
+        "draft_allowed": false
+      },
+      "out_of_office": {
+        "phrases": [
+          "out of office",
+          "automatic reply",
+          "auto reply",
+          "away from the office",
+          "currently away",
+          "on vacation",
+          "on holiday"
+        ],
+        "proposed_action": "schedule_draft_review",
+        "draft_allowed": true
+      },
+      "not_interested": {
+        "phrases": [
+          "not interested",
+          "no thanks",
+          "no thank you",
+          "not a fit"
+        ],
+        "proposed_action": "suppress",
+        "draft_allowed": false
+      },
+      "booking": {
+        "phrases": [
+          "book a call",
+          "schedule a call",
+          "send your calendar",
+          "calendar link",
+          "available to talk",
+          "set up a meeting"
+        ],
+        "proposed_action": "prepare_booking_handoff",
+        "draft_allowed": true
+      },
+      "positive_interest": {
+        "phrases": [
+          "i'm interested",
+          "i am interested",
+          "tell me more",
+          "sounds interesting",
+          "sounds good",
+          "worth exploring"
+        ],
+        "proposed_action": "prepare_positive_reply",
+        "draft_allowed": true
+      },
+      "objection": {
+        "phrases": [
+          "already have",
+          "already use",
+          "under contract",
+          "too expensive",
+          "not a priority",
+          "bad timing"
+        ],
+        "proposed_action": "prepare_objection_response",
+        "draft_allowed": true
+      },
+      "question": {
+        "phrases": [],
+        "match_question_mark": true,
+        "proposed_action": "prepare_answer",
+        "draft_allowed": true
+      },
+      "ambiguous": {
+        "phrases": [],
+        "proposed_action": "manual_triage",
+        "draft_allowed": false
+      }
+    }
+  },
+  "measurement": {
+    "actionable_intents": [
+      "booking",
+      "positive_interest",
+      "question",
+      "objection"
+    ],
+    "ooo_intent": "out_of_office",
+    "booking_intent": "booking",
+    "speed_to_draft_target_seconds": 300
+  },
+  "safety": {
+    "mode": "offline_shadow",
+    "external_send_allowed": false,
+    "crm_mutation_allowed": false,
+    "provider_api_allowed": false,
+    "automatic_subsequence_allowed": false,
+    "human_review_required_for_drafts": true,
+    "unknown_message_attribution": "reject"
+  }
+}

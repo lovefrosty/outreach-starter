@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Local secret guard — blocks commits that contain secrets or forbidden files,
+# so nothing sensitive ever leaves your machine.
+#
+# Enable once per clone:   git config core.hooksPath .githooks
+# Full coverage:           brew install gitleaks   (otherwise a built-in scan runs)
+# Bypass (discouraged):    git commit --no-verify
+set -euo pipefail
+
+# 1) Preferred: gitleaks on the staged changes.
+if command -v gitleaks >/dev/null 2>&1; then
+  if ! gitleaks protect --staged --redact --no-banner; then
+    echo "✋ gitleaks found a secret in staged changes — commit blocked." >&2
+    exit 1
+  fi
+  exit 0
+fi
+
+# 2) Fallback: built-in pattern + forbidden-file scan.
+echo "[pre-commit] gitleaks not installed — using built-in scan (brew install gitleaks for full coverage)" >&2
+fail=0
+patterns='(gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|[0-9]{8,10}:[A-Za-z0-9_-]{35}|1//[A-Za-z0-9_-]{30,}|xox[baprs]-[A-Za-z0-9-]{10,})'
+
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  if git show ":$f" 2>/dev/null | grep -nIEq "$patterns"; then
+    echo "✋ possible secret value in staged file: $f" >&2
+    fail=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+if git diff --cached --name-only --diff-filter=ACM \
+  | grep -iEq '(^|/)secrets/|(^|/)\.env$|\.env\.[^e]|\.db$|\.sqlite|\.pem$|\.key$|credentials?\.json$|token\.json$|id_rsa'; then
+  echo "✋ forbidden file type staged (secrets/.env/.db/key/credential)" >&2
+  fail=1
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo "Commit blocked by pre-commit secret guard. Fix the above, or 'git commit --no-verify' to bypass (discouraged)." >&2
+  exit 1
+fi
+exit 0

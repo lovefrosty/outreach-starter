@@ -1,0 +1,35 @@
+{
+  "schema_version": "outreach.recipient-mail-segmentation.v1",
+  "max_mx_age_days": 30,
+  "unknown_segment_policy": "hold",
+  "dimensions": {
+    "mailbox_provider": [
+      {
+        "id": "google_workspace",
+        "mx_suffixes": [".google.com", ".googlemail.com"]
+      },
+      {
+        "id": "microsoft_365",
+        "mx_suffixes": [".protection.outlook.com", ".outlook.com"]
+      }
+    ],
+    "security_gateway": [
+      {
+        "id": "proofpoint",
+        "mx_suffixes": [".pphosted.com", ".ppe-hosted.com"]
+      },
+      {
+        "id": "mimecast",
+        "mx_suffixes": [".mimecast.com"]
+      }
+    ]
+  },
+  "routing_segments": {
+    "google_workspace": "google_workspace",
+    "microsoft_365": "microsoft_365",
+    "proofpoint": "proofpoint_gateway",
+    "mimecast": "mimecast_gateway",
+    "other": "other",
+    "unknown": "unknown"
+  }
+}
